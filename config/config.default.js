@@ -30,7 +30,7 @@ module.exports = appInfo => {
   config.sequelize = {
     dialect: 'mysql', // support: mysql, mariadb, postgres, mssql
     database: 'tftime',
-    host: 'localhost',
+    host: '127.0.0.1',
     port: '3306',
     username: 'root',
     password: 'winfan123',

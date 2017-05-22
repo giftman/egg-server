@@ -1,4 +1,4 @@
-# egg-example2
+# egg-example
 
 
 
