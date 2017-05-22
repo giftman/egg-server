@@ -1,4 +1,4 @@
-# Egg-server-docker
+# egg-example
 
 
 
@@ -10,36 +10,24 @@ see [egg docs][egg] for more detail.
 
 ### Development
 ```shell
-$ docker-compose up
+$ npm install
+$ npm run dev
+$ open http://localhost:7001/news
 ```
 
 ### Deploy
 
-Use `EGG_SERVER_ENV=docker` to test
+Use `EGG_SERVER_ENV=prod` to enable prod mode
 
-Use `EGG_SERVER_ENV=prod` to prod
-
-### Dependence
-
-Daocloud docker engine
-
-### Update
-
-git subtree:
-
-* http://blog.zlxstar.me/blog/2014/07/18/git-submodule-vs-git-subtree/
-* https://gist.github.com/kvnsmth/4688345
-
-```
-git subtree add --prefix=src --squash https://github.com/giftman/egg-server.git master
-
-git subtree split --prefix=src --branch egg-server
-
-#push to egg-server
-git push https://github.com/giftman/egg-server-docker.git egg-server:master
-
-#pull to update 
-git subtree pull --prefix=src --squash https://github.com/giftman/egg-server.git master
+```shell
+$ EGG_SERVER_ENV=prod npm start
 ```
 
-I pull to update fail,I don't know why, solve next time..
+### npm scripts
+
+- Use `npm run lint` to check code style.
+- Use `npm test` to run unit test.
+- Use `npm run autod` to auto detect dependencies upgrade, see [autod](https://www.npmjs.com/package/autod) for more detail.
+
+
+[egg]: https://eggjs.org

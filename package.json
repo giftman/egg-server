@@ -1,0 +1,47 @@
+{
+  "name": "egg-example",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "dependencies": {
+    "egg": "^1.1.0",
+    "egg-mysql": "^3.0.0",
+    "egg-redis": "^1.0.1",
+    "egg-sequelize": "^2.1.4",
+    "egg-validate": "^1.0.0",
+    "egg-weapp-sdk": "^1.1.1",
+    "bcrypt-nodejs": "0.0.3"
+  },
+  "devDependencies": {
+    "autod": "^2.8.0",
+    "egg-bin": "^3.3.0",
+    "egg-ci": "^1.6.0",
+    "egg-mock": "^3.4.0",
+    "eslint": "^3.19.0",
+    "eslint-config-egg": "^3.2.0",
+    "webstorm-disable-index": "^1.1.2",
+    "mocha": "^3.4.1"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "egg-bin dev",
+    "test": "npm run lint -- --fix && npm run test-local",
+    "test-local": "egg-bin test",
+    "cov": "egg-bin cov",
+    "lint": "eslint .",
+    "ci": "npm run lint && npm run cov",
+    "autod": "autod"
+  },
+  "ci": {
+    "version": "6"
+  },
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "author": "winfan",
+  "license": "MIT"
+}
