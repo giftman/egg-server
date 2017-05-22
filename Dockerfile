@@ -22,8 +22,8 @@ WORKDIR   /src
 
 COPY . /src
 RUN npm install --production
-EXPOSE 80
-RUN EGG_SERVER_ENV=prod npm start
+RUN EGG_SERVER_ENV=prod
 
+EXPOSE 7001
 
 #CMD [ "node","index.js" ]
