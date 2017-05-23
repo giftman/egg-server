@@ -18,12 +18,17 @@ RUN  \
   sudo ln -s /opt/node/lib/node_modules/nodemon/bin/nodemon.js /usr/bin/nodemon && \
   rm -f /opt/node-v7.8.0-linux-x64.tar.gz
 
-WORKDIR   /src
+# use changes to package.json to force Docker not to use the cache
+# when we change our application's nodejs dependencies:
+ADD package.json /tmp/package.json
+RUN cd /tmp && npm install --production
+RUN mkdir -p /opt/app && cp -a /tmp/node_modules /opt/app/
 
-COPY . /src
-RUN npm install --production
-RUN EGG_SERVER_ENV=prod
+# From here we load our application's code in, therefore the previous docker
+# "layer" thats been cached will be used if possible
+WORKDIR /opt/app
+ADD . /opt/app
 
 EXPOSE 7001
 
-#CMD [ "node","index.js" ]
+CMD [ "node","index.js" ]
