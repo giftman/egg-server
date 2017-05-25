@@ -1,14 +1,6 @@
 'use strict';
 var platforms = require('../sdks');
-var md5 = require('../utils/md5')
 
-
-function create_query_id(){
-  var data_now = new Date()
-  var random_str = Math.random().toString(36).substring(6).toUpperCase();
-  console.log(random_str)
-  return `${data_now.getFullYear()}${data_now.getMonth()}${data_now.getDay()}${data_now.getHours()}${data_now.getMinutes()}${data_now.getSeconds()}${random_str}`
-}
 
 module.exports = app => {
   class SDKController extends app.Controller {
@@ -16,12 +8,12 @@ module.exports = app => {
       this.ctx.body = 'hi, egg';
     }
     * init(){
-        console.log('init')
+        ctx.logger.info('init')
     }
     * login() {
         const {ctx} = this;
-        console.log(ctx.sdk_version_name)
-        console.log(ctx.request.headers)
+        ctx.logger.info(ctx.sdk_version_name)
+        ctx.logger.info(ctx.request.headers)
         let _r = {
             "code": 1,
             "userType": 0,
@@ -33,7 +25,7 @@ module.exports = app => {
 
         var login_data = platforms[ctx.sdk_code][ctx.sdk_version_name].login(ctx.data, ctx.serverConfig);
         var {code, message, open_id} = login_data
-        console.log(message)
+        ctx.logger.info(message)
         _r['timestamp'] = ctx.data.timestamp || new Date().getTime()
         _r['openId'] = open_id
         _r['t'] = new Date().getTime()
@@ -42,13 +34,13 @@ module.exports = app => {
         var sign_str = ''
         if (code === 0) {
             sign_str = `gameAppkey=${ctx.app_key}&userType=${_r.userType}&openId=${open_id}&timestamp=${_r.timestamp}`
-            console.log(sign_str)
-            _r['serverSign'] = md5(sign_str)
+            ctx.logger.info(sign_str)
+            _r['serverSign'] = ctx.helper.md5(sign_str)
             _r['remoteIp'] = ctx.request.host || ''
             _r['code'] = 1
         }
         _r['message'] = message
-        console.log(_r)
+        ctx.logger.info(_r)
         this.ctx.body = _r;
     }
 
@@ -59,7 +51,7 @@ module.exports = app => {
             "data": {}
         }
         const {ctx} = this;
-        console.log(ctx.isIOS);
+        ctx.logger.info(ctx.isIOS);
         var pay_params = {}
         pay_params.gameSimpleName = ctx.game_code
         pay_params.sdkSimpleName = ctx.sdk_code
@@ -73,8 +65,8 @@ module.exports = app => {
         pay_params.currency = ctx.data.currency||'CNY'
         pay_params.productName = ctx.data.productName||''
         if (pay_params.serverId && pay_params.playerId && pay_params.postAmount){
-            console.log('create')
-            pay_params.queryId = create_query_id()
+            ctx.logger.info('create')
+            pay_params.queryId = ctx.helper.uuid()
             pay_params.remoteIp = ctx.request.host || '';
             pay_params.postTime = new Date().getTime()
             pay_params.orderId = ''
@@ -86,7 +78,7 @@ module.exports = app => {
 
             pay_params.other = platforms[ctx.sdk_code][ctx.sdk_version_name].create(ctx,ctx.serverConfig); 
 
-            console.log(pay_params)
+            ctx.logger.info(pay_params)
             const create_order_result = yield ctx.service.pay.createPay(pay_params);
 
             //callback to client

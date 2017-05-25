@@ -9,8 +9,10 @@ module.exports = app => {
     }
 
     * createPay(info) {
-      yield this.models.PayAction.sync();
-      const pay_action = yield this.models.PayAction.create(info);
+      // yield this.models.PayAction.sync();
+      const PayAction = this.ctx.helper.get_pay_action(this.app, info.gameSimpleName);
+      yield PayAction.sync();
+      const pay_action = yield PayAction.create(info);
       return pay_action;
     }
 
