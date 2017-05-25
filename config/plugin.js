@@ -9,12 +9,12 @@ exports.validate = {
 };
 
 exports.redis = {
-  enable: true,
+  enable: false,
   package: 'egg-redis',
 };
 
 exports.weappSDK = {
-  enable: true,
+  enable: false,
   package: 'egg-weapp-sdk',
 };
 

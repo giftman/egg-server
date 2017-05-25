@@ -14,7 +14,7 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_1494230402695_6475';
   config.security = {
     csrf: {
-      ignoreJSON: true,
+      enable: false,
     },
   };
 
