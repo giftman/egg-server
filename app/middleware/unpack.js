@@ -12,6 +12,7 @@ module.exports = () => {
     const { request } = this;
     if (request.body.data) {
       this.data = JSON.parse(request.body.data);
+      // console.log(this.data.gameSimpleName);
       this.game_code = this.data.gameSimpleName;
       this.sdk_code = this.data.sdkSimpleName;
       this.sdk_version_name = this.data.sdkVersionCode;

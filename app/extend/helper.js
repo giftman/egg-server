@@ -22,9 +22,9 @@ module.exports = {
 
     const PayAction = app.model.define(`pay_${name}`, {
       sex: {
-          type: INTEGER,
-          defaultValue: SEX_TAG.UNKNOWN,
-        },
+        type: INTEGER,
+        defaultValue: SEX_TAG.UNKNOWN,
+      },
       queryId: STRING(40),
       orderId: STRING(50),
       gameSimpleName: STRING(40),
