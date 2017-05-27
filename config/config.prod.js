@@ -12,9 +12,9 @@ exports.redis = {
 exports.sequelize = {
   dialect: 'mysql', // support: mysql, mariadb, postgres, mssql
   database: 'tftime',
-  host: 'mysql',
+  host: '10.66.215.210',
   port: '3306',
-  username: 'root',
+  username: 'tftime',
   password: 'winfan123',
 };
 
