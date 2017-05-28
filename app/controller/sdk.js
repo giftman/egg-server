@@ -20,7 +20,6 @@ module.exports = app => {
         message: '',
         other: '',
       };
-
       const login_data = yield app.sdk_module[ctx.sdk_code][ctx.sdk_version_name].login(ctx, ctx.data, ctx.serverConfig);
       const { code, message, open_id } = login_data;
         // ctx.logger.info(message)
