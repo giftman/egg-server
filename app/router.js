@@ -7,4 +7,5 @@ module.exports = app => {
   app.get('/logincheck', unpack, 'sdk.login');
   app.get('/paycheck/create/:gameSimpleName/:sdkSimpleName/:sdkVersionCode', unpack, 'sdk.create');
   app.get('/paycheck', unpack, 'sdk.create');
+  app.post('/update_config', 'sdk.update');
 };

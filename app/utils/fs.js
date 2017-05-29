@@ -18,3 +18,13 @@ exports.stat = function(filename) {
     });
   });
 };
+
+exports.writeFile = function(filename, data, encode = 'utf8') {
+   // or promise
+  return new Promise(function(resolve) {
+    fs.writeFile(filename, data, encode, function(err) {
+      console.log(err);
+      resolve(!err);
+    });
+  });
+};

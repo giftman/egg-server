@@ -1,12 +1,26 @@
 'use strict';
+const fs = require('../utils/fs');
+const path = require('path');
 
 module.exports = app => {
   class SDKController extends app.Controller {
     * index() {
       this.ctx.body = 'hi, egg';
     }
-    * init() {
+    * update() {
     //   ctx.logger.info('init');
+      const { ctx } = this;
+      console.log(ctx.request.body.data);
+      const new_config = ctx.request.body.data;
+      const the_file_dir = path.join(ctx.app.baseDir, 'app/utils/config.json');
+      const result = yield fs.writeFile(the_file_dir, new_config);
+      if (result) {
+        ctx.app.update_sdk_config();
+        ctx.body = 'update success';
+      } else {
+        ctx.body = 'update failure';
+      }
+
     }
     * login() {
       const { ctx } = this;
