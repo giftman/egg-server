@@ -41,7 +41,6 @@ module.exports = appInfo => {
     appId: 'wx5a86a487fb09ab5c',
     appSecret: '5ef3e3c042a89a75e26e823df7f41e23',
   };
-
   return config;
 };
 

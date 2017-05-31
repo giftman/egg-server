@@ -1,3 +1,0 @@
-{
-  "fytx_test": {"appKey":"fytx_onlie#@12&34","payCallbackUrl":"http://service.fytxonline.com/service/confirm/public","sdk_list":{"i9133":{"V1_0":{"userType":41,"itemConfig":{},"serverConfig":{"appKey":"1ce5bdb8a618e3da7bb8914be89ec4e1","amount_rate":"10"}}}}}
-}

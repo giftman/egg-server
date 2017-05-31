@@ -78,7 +78,7 @@ module.exports = app => {
       if (pay_params.serverId && pay_params.playerId && pay_params.postAmount) {
             // ctx.logger.info('create')
         pay_params.queryId = ctx.helper.uuid();
-        pay_params.remoteIp = ctx.request.host || '';
+        pay_params.remoteIp = ctx.ip || '';
         pay_params.postTime = new Date().getTime();
         pay_params.orderId = '';
         pay_params.payTime = 0;
@@ -121,7 +121,28 @@ module.exports = app => {
     }
 
     * confirm() {
-      this.ctx.body = 'hi, confirm';
+      const { ctx } = this;
+      const result = yield app.sdk_module[ctx.sdk_code][ctx.sdk_version_name].confirm(ctx, ctx.serverConfig);
+      let { query_id, amount, result_msg, product_id } = result;
+      if (query_id) {
+        let pay_action = yield ctx.service.pay.findPayAction(query_id);
+        pay_action.payAmount = parseFloat(amount);
+        pay_action.remark = result.remark || '';
+        pay_action.payTime = new Date().getTime();
+        pay_action = yield ctx.service.pay.callback_to_game(pay_action);
+        if (pay_action.payStatus !== 4) {
+          result_msg = `${query_id} call back to game error`;
+        }
+
+      } else {
+        result_msg = 'not query_id';
+      }
+      this.ctx.body = result_msg;
+    }
+
+    * callBackToGame() {
+      console.log(this.ctx.request.body);
+      this.ctx.body = { code: 1, message: 'success' };
     }
   }
   return SDKController;

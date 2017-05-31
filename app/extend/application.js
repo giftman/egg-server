@@ -2,6 +2,7 @@
 
 const MODULE = Symbol('Application#module');
 const SDK_CONFIG = Symbol('Application#config');
+const APP_TABLES = Symbol('Application#tables');
 const path = require('path');
 const fs = require('../utils/fs');
 // app/extend/context.js
@@ -17,6 +18,12 @@ module.exports = {
       loadSdkConfig(this);
     }
     return this[SDK_CONFIG];
+  },
+  get tables() {
+    if (!this[APP_TABLES]) {
+      this[APP_TABLES] = [];
+    }
+    return this[APP_TABLES];
   },
   get_game_config(game_code) {
     return this.sdk_config[game_code];
