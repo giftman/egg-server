@@ -8,13 +8,13 @@ module.exports = app => {
       this.ctx.body = 'hi, egg';
     }
     * update() {
-    //   ctx.logger.info('init');
       const { ctx } = this;
-      console.log(ctx.request.body.data);
+      ctx.logger.info('update config: %s', ctx.request.body.data);
       const new_config = ctx.request.body.data;
       const the_file_dir = path.join(ctx.app.baseDir, 'app/utils/config.json');
       const result = yield fs.writeFile(the_file_dir, new_config);
       if (result) {
+        // 直接将原来的设为null，留意有无正确释放
         ctx.app.update_sdk_config();
         ctx.body = 'update success';
       } else {
@@ -24,8 +24,6 @@ module.exports = app => {
     }
     * login() {
       const { ctx } = this;
-        // ctx.logger.info(ctx.sdk_version_name)
-        // ctx.logger.info(ctx.request.headers)
       const _r = {
         code: 1,
         userType: 0,
@@ -35,23 +33,25 @@ module.exports = app => {
         other: '',
       };
       const login_data = yield app.sdk_module[ctx.sdk_code][ctx.sdk_version_name].login(ctx, ctx.data, ctx.serverConfig);
+      ctx.logger.info('%s %s %s login request ----------------: \n%s', ctx.game_code, ctx.sdk_code, ctx.sdk_version_name, ctx.data_str);
+
       const { code, message, open_id } = login_data;
-        // ctx.logger.info(message)
       _r.timestamp = ctx.data.timestamp || new Date().getTime();
       _r.openId = open_id;
-      _r.t = new Date().getTime();
+      _r.t = ctx.helper.currentTime;
       _r.userType = ctx.sdk_version_config.userType || 0;
       _r.other = login_data.other || '';
       let sign_str = '';
       if (code === 0) {
         sign_str = `gameAppkey=${ctx.app_key}&userType=${_r.userType}&openId=${open_id}&timestamp=${_r.timestamp}`;
-        ctx.logger.info(sign_str);
+        // ctx.logger.info(sign_str);
         _r.serverSign = ctx.helper.md5(sign_str);
         _r.remoteIp = ctx.ip || '';
         _r.code = 1;
+        _r.message = message;
+        yield ctx.service.sendlog.send('login', _r, ctx.data_str);
       }
-      _r.message = message;
-      ctx.logger.info(_r);
+      ctx.logger.info('%s %s %s login response ----------------: \n%s', ctx.game_code, ctx.sdk_code, ctx.sdk_version_name, JSON.stringify(_r));
       this.ctx.body = _r;
     }
 
@@ -88,9 +88,11 @@ module.exports = app => {
         pay_params.payStatus = 0;
 
             // console.log(app.sdk_module);
+        ctx.logger.info('%s %s %s createOrder request ----------------: \nquery_data:%s\nserverConfig:%s',
+         ctx.game_code, ctx.sdk_code, ctx.sdk_version_name, ctx.data_str, JSON.stringify(ctx.serverConfig));
         pay_params.other = yield app.sdk_module[ctx.sdk_code][ctx.sdk_version_name].create(ctx, ctx.serverConfig);
 
-        ctx.logger.info(pay_params);
+        // ctx.logger.info(pay_params);
         const create_order_result = yield ctx.service.pay.createPay(pay_params);
 
             // callback to client

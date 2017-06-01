@@ -6,6 +6,25 @@ module.exports = {
     const crypto = require('crypto');
     return crypto.createHash('md5').update(text).digest('hex');
   },
+  make_sign(_d, key) {
+    const sign_list = [];
+    // console.log(_d);
+    for (const k of Object.keys(_d).sort()) {
+      // console.log(k);
+      if (k === 'sign') {
+        continue;
+      }
+      const v = _d[k];
+      sign_list.push(`${k}=${v}`);
+    }
+    let sign_str = sign_list.join('');
+    sign_str = sign_str + key;
+    // console.log(sign_str);
+    return this.md5(sign_str);
+  },
+  get currentTime() {
+    return parseInt(Date.now() / 1000);
+  },
   uuid() {
     const t = new Date();
     const random_str = Math.random().toString(32).substring(6)

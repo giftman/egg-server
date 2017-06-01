@@ -9,19 +9,21 @@ module.exports = () => {
     // 支持 options.ththishold
     // console.log(this.request.body);
     const { request } = this;
-    if (request.body.data) {
+    if (this.params.gameSimpleName) {
+      this.data_str = request.query.data || '';
+      this.data = request.query.data ? JSON.parse(request.query.data) : request.query;
+      //   console.log(this.data);
+      //   console.log(this.params);
+      this.game_code = this.params.gameSimpleName;
+      this.sdk_code = this.params.sdkSimpleName;
+      this.sdk_version_name = this.params.sdkVersionCode;
+    } else {
+      this.data_str = request.body.data;
       this.data = JSON.parse(request.body.data);
       // console.log(this.data.gameSimpleName);
       this.game_code = this.data.gameSimpleName;
       this.sdk_code = this.data.sdkSimpleName;
       this.sdk_version_name = this.data.sdkVersionCode;
-    } else {
-      this.data = request.query.data ? JSON.parse(request.query.data) : request.query;
-    //   console.log(this.data);
-    //   console.log(this.params);
-      this.game_code = this.params.gameSimpleName;
-      this.sdk_code = this.params.sdkSimpleName;
-      this.sdk_version_name = this.params.sdkVersionCode;
     }
     this.game_config = this.app.get_game_config(this.game_code);
     this.sdk_version_config = this.app.get_sdk_config(this.game_code, this.sdk_code, this.sdk_version_name);

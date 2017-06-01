@@ -15,8 +15,8 @@ module.exports = app => {
         yield PayAction.sync();
         this.ctx.app.tables.push(`pay_${info.gameSimpleName}`);
         this.ctx.app.model[info.gameSimpleName] = PayAction;
+        this.logger.info('save new table, now have tables list %s', this.ctx.app.tables);
       }
-      console.log(this.ctx.app.tables);
       const pay_action = yield PayAction.create(info);
       return pay_action;
     }
@@ -60,19 +60,27 @@ module.exports = app => {
             &gameAppKey=${this.app_key}
       `);
       // console.log(post_parmgs);
-      const result = yield this.ctx.curl('http://127.0.0.1:7001/call_back_to_game', {
-        method: 'post',
-        data: post_parmgs,
-        dataType: 'json',
-        contentType: 'json',
-      });
-      console.log(result.data);
-      if (result.data && result.data.code === 1) {
-        pay_action.payStatus = 4;
-      } else {
+      try {
+        const result = yield this.ctx.curl('http://127.0.0.1:7001/call_back_to_game', {
+          method: 'post',
+          data: post_parmgs,
+          dataType: 'json',
+          contentType: 'json',
+        });
+        console.log(result.data);
+        if (result.data && result.data.code === 1) {
+          pay_action.payStatus = 4;
+        } else {
+          pay_action.payStatus = -3;
+          pay_action.remark = result.data.message || 'call back to game fail';
+        }
+      } catch (e) {
+        console.log('catch');
         pay_action.payStatus = -3;
-        pay_action.remark = result.data.message || 'call back to game fail';
+        pay_action.remark = 'call back to game fail';
       }
+
+
       yield pay_action.save();
 
       return pay_action;
