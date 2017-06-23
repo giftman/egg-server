@@ -79,7 +79,7 @@ module.exports = app => {
             // ctx.logger.info('create')
         pay_params.queryId = ctx.helper.uuid();
         pay_params.remoteIp = ctx.ip || '';
-        pay_params.postTime = new Date().getTime();
+        pay_params.postTime = parseInt(Date.now() / 1000);
         pay_params.orderId = '';
         pay_params.payTime = 0;
         pay_params.payAmount = 0;
@@ -101,7 +101,7 @@ module.exports = app => {
           const isOpenThirdPay = ctx.serverConfig.isOpenThirdPay || 'false';
           _r.data.queryId = pay_params.queryId;
           _r.data.other = pay_params.other;
-          _r.data.products = itemConfig;
+          _r.data.products = JSON.stringify(itemConfig);
           _r.data.isOpenThirdPay = isOpenThirdPay;
           _r.data.serverId = pay_params.serverId;
           _r.data.playerId = pay_params.playerId;
@@ -115,11 +115,13 @@ module.exports = app => {
           _r.data.uId = pay_params.uId;
           _r.data.remoteIp = pay_params.remoteIp;
           _r.code = 1;
-          ctx.body = _r;
+          yield ctx.service.sendlog.send('post_pay', _r.data, ctx.data_str);
+          ctx.logger.info('%s %s %s createOrder result ----------------: \n%s',
+         ctx.game_code, ctx.sdk_code, ctx.sdk_version_name, JSON.stringify(_r));
         }
-      } else {
-        ctx.body = _r;
       }
+
+      ctx.body = _r;
     }
 
     * confirm() {

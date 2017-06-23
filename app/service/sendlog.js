@@ -20,15 +20,15 @@ module.exports = app => {
     //   this.logger.info(post_data);
       post_data.sign = this.ctx.helper.make_sign(post_data, this.config.STATISTIC_SIGN_KEY);
       try {
-        yield this.ctx.curl(this.config.STATISTIC_ADDRESS, {
+        const result = yield this.ctx.curl(this.config.STATISTIC_ADDRESS, {
           method: 'get',
           data: post_data,
           dataType: 'json',
           contentType: 'json',
         });
-        // console.log(result);
+        console.log('send log result : %s', result.data);
       } catch (e) {
-        console.log(e.message);
+        console.log(e);
       }
     }
   }

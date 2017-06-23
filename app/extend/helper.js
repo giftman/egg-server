@@ -14,12 +14,13 @@ module.exports = {
       if (k === 'sign') {
         continue;
       }
+      // chinese not go well
       const v = _d[k];
       sign_list.push(`${k}=${v}`);
     }
     let sign_str = sign_list.join('');
     sign_str = sign_str + key;
-    // console.log(sign_str);
+    console.log(sign_str);
     return this.md5(sign_str);
   },
   get currentTime() {

@@ -42,6 +42,7 @@ module.exports = appInfo => {
     appSecret: '5ef3e3c042a89a75e26e823df7f41e23',
   };
   config.STATISTIC_ADDRESS = 'http://statistic.public.sdk.gzyouai.com/sdk/statistic';
+  // config.STATISTIC_ADDRESS = 'http://183.57.76.181:9030/sdk/statistic';
   config.STATISTIC_SIGN_KEY = '12909asdask23';
   return config;
 };
